@@ -1,0 +1,26 @@
+.thumbnail-gallery {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.thumbnail {
+  border: 2px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border 0.2s;
+  width: 80px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.thumbnail:hover {
+  border: 2px solid #7b2ff2;
+}
+.thumbnail img {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+}

@@ -1,0 +1,20 @@
+.app-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+  padding: 32px 24px 24px 24px;
+}
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 2rem;
+  color: #7b2ff2;
+}
+.main-area {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  justify-content: center;
+}
