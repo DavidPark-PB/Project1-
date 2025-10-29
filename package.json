@@ -16,7 +16,6 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-scroll-area": "^1.0.5",
-    "@radix-ui/react-drawer": "^0.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.294.0",

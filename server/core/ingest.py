@@ -3,7 +3,7 @@ Excel/CSV ingestion module for parsing Master product files.
 """
 import pandas as pd
 from pathlib import Path
-from typing import Dict, List, Any, Union, BinaryIO
+from typing import Dict, List, Any, Union, BinaryIO, Optional
 from io import BytesIO
 from .schema import MasterRow, Variant, IngestPayload
 
