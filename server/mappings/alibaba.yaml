@@ -1,0 +1,134 @@
+# Alibaba Product Upload Mapping
+meta:
+  output_format: xlsx
+  sheet_name: ProductInfo
+  encoding: utf-8-sig
+
+variant_mode: matrix
+
+columns:
+  category_id:
+    lookup:
+      table: category_map_alibaba.csv
+      key: category_path
+      from: category_path
+      return: alibaba_category_id
+
+  product_name:
+    from: title
+    transforms:
+      - truncate: {max: 128}
+
+  keywords:
+    from: item_specifics_json.keywords
+    fallback: title
+    transforms:
+      - truncate: {max: 256}
+
+  price_usd:
+    from: price
+    transforms:
+      - currency_convert: {to: "USD"}
+      - round: {decimals: 2}
+
+  moq:
+    from: moq
+    default: 1
+
+  sku:
+    from: sku
+
+  description:
+    from: description_html
+    transforms:
+      - sanitize_html
+      - limit_bytes: {max: 50000}
+
+  main_image:
+    from: image_urls[0]
+
+  image_url_1:
+    from: image_urls[1]
+    if_exists: true
+
+  image_url_2:
+    from: image_urls[2]
+    if_exists: true
+
+  image_url_3:
+    from: image_urls[3]
+    if_exists: true
+
+  image_url_4:
+    from: image_urls[4]
+    if_exists: true
+
+  image_url_5:
+    from: image_urls[5]
+    if_exists: true
+
+  brand_name:
+    from: brand
+    default: "OEM"
+
+  model_number:
+    from: model
+    default: ""
+
+  weight_kg:
+    from: weight_g
+    transforms:
+      - round: {decimals: 3}
+    if_exists: true
+
+  length_cm:
+    from: dim_cm_l
+    if_exists: true
+
+  width_cm:
+    from: dim_cm_w
+    if_exists: true
+
+  height_cm:
+    from: dim_cm_h
+    if_exists: true
+
+  lead_time_days:
+    from: lead_time_days
+    default: 7
+
+  port_name:
+    from: port_name
+    default: "Shanghai"
+
+  packaging_details:
+    from: packaging_info
+    default: "Standard export packaging"
+
+  origin_country:
+    from: origin_country
+    default: "China"
+
+  hs_code:
+    from: hs_code
+    default: ""
+
+  attributes:
+    from: item_specifics_json
+    render: kv_pairs
+    default: ""
+
+  variants_json:
+    from: variants
+    render: json_compact
+    if_exists: true
+
+policies:
+  required:
+    - category_id
+    - product_name
+    - price_usd
+    - sku
+    - main_image
+    - moq
+  images_max: 6

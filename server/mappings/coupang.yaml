@@ -1,0 +1,119 @@
+# Coupang Product Registration Mapping
+meta:
+  output_format: xlsx
+  sheet_name: 상품등록
+  encoding: utf-8
+
+variant_mode: rows
+
+columns:
+  판매자상품코드:
+    from: sku
+
+  상품명:
+    from: title
+    transforms:
+      - truncate: {max: 100}
+
+  카테고리코드:
+    lookup:
+      table: category_map_coupang.csv
+      key: category_path
+      from: category_path
+      return: coupang_category_code
+
+  브랜드:
+    from: brand
+    default: "노브랜드"
+
+  제조사:
+    from: brand
+    default: "OEM"
+
+  판매가격:
+    from: price
+    transforms:
+      - currency_convert: {to: "KRW"}
+      - round: {decimals: 0}
+
+  수량:
+    from: quantity
+
+  상품상세설명:
+    from: description_html
+    transforms:
+      - sanitize_html
+      - limit_bytes: {max: 40000}
+
+  대표이미지URL:
+    from: image_urls[0]
+
+  추가이미지URL1:
+    from: image_urls[1]
+    if_exists: true
+
+  추가이미지URL2:
+    from: image_urls[2]
+    if_exists: true
+
+  추가이미지URL3:
+    from: image_urls[3]
+    if_exists: true
+
+  추가이미지URL4:
+    from: image_urls[4]
+    if_exists: true
+
+  추가이미지URL5:
+    from: image_urls[5]
+    if_exists: true
+
+  추가이미지URL6:
+    from: image_urls[6]
+    if_exists: true
+
+  추가이미지URL7:
+    from: image_urls[7]
+    if_exists: true
+
+  원산지:
+    from: origin_country
+    default: "중국"
+
+  상품상태:
+    from: condition
+    map_enum:
+      "new": "새상품"
+      "used": "중고"
+      "refurbished": "리퍼"
+    default: "새상품"
+
+  배송방법:
+    default: "쿠팡배송"
+
+  출고지:
+    default: "국내"
+
+  바코드:
+    from: barcode
+    default: ""
+
+  모델명:
+    from: model
+    default: ""
+
+  무게(g):
+    from: weight_g
+    transforms:
+      - round: {decimals: 0}
+    default: 0
+
+policies:
+  required:
+    - 판매자상품코드
+    - 상품명
+    - 카테고리코드
+    - 판매가격
+    - 수량
+    - 대표이미지URL
+  images_max: 8

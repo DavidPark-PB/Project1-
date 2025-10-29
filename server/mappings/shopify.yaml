@@ -1,0 +1,137 @@
+# Shopify Product Import Mapping
+meta:
+  output_format: csv
+  encoding: utf-8
+
+variant_mode: rows_by_handle
+
+columns:
+  Handle:
+    from: sku
+    transforms:
+      - slugify
+
+  Title:
+    from: title
+    transforms:
+      - truncate: {max: 255}
+
+  Body (HTML):
+    from: description_html
+    transforms:
+      - sanitize_html
+
+  Vendor:
+    from: brand
+    default: ""
+
+  Type:
+    from: category_path
+    default: ""
+
+  Tags:
+    from: item_specifics_json
+    render: tags_from_specifics
+    default: ""
+
+  Published:
+    default: "TRUE"
+
+  Option1 Name:
+    default: "Title"
+
+  Option1 Value:
+    default: "Default Title"
+
+  Option2 Name:
+    default: ""
+
+  Option2 Value:
+    default: ""
+
+  Option3 Name:
+    default: ""
+
+  Option3 Value:
+    default: ""
+
+  Variant SKU:
+    from: sku
+
+  Variant Grams:
+    from: weight_g
+    transforms:
+      - round: {decimals: 0}
+    default: 0
+
+  Variant Inventory Tracker:
+    default: "shopify"
+
+  Variant Inventory Policy:
+    default: "deny"
+
+  Variant Fulfillment Service:
+    default: "manual"
+
+  Variant Price:
+    from: price
+    transforms:
+      - round: {decimals: 2}
+
+  Variant Compare At Price:
+    default: ""
+
+  Variant Requires Shipping:
+    default: "TRUE"
+
+  Variant Taxable:
+    default: "TRUE"
+
+  Variant Barcode:
+    from: barcode
+    default: ""
+
+  Image Src:
+    from: image_urls[0]
+
+  Image Position:
+    default: 1
+
+  Image Alt Text:
+    from: title
+    transforms:
+      - truncate: {max: 100}
+
+  Gift Card:
+    default: "FALSE"
+
+  SEO Title:
+    from: title
+    transforms:
+      - truncate: {max: 70}
+
+  SEO Description:
+    from: description_html
+    transforms:
+      - strip_disallowed_tags
+      - truncate: {max: 160}
+
+  Variant Weight Unit:
+    default: "g"
+
+  Variant Tax Code:
+    default: ""
+
+  Cost per item:
+    default: ""
+
+  Status:
+    default: "active"
+
+policies:
+  required:
+    - Handle
+    - Title
+    - Variant Price
+    - Variant SKU
+  images_max: 250

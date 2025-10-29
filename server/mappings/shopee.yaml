@@ -1,0 +1,142 @@
+# Shopee Product Upload Mapping (Locale-aware)
+meta:
+  output_format: csv
+  encoding: utf-8-sig
+
+variant_mode: matrix
+
+columns:
+  category_id:
+    lookup:
+      table: category_map_shopee.csv
+      key: category_path
+      from: category_path
+      return: shopee_category_id
+
+  name:
+    from: title
+    transforms:
+      - truncate: {max: 120}
+
+  description:
+    from: description_html
+    transforms:
+      - strip_disallowed_tags
+      - limit_bytes: {max: 25000}
+
+  price:
+    from: price
+    transforms:
+      - round: {decimals: 2}
+
+  stock:
+    from: quantity
+
+  item_sku:
+    from: sku
+
+  variation_name_1:
+    default: ""
+
+  variation_name_2:
+    default: ""
+
+  variation_tier_1:
+    default: ""
+
+  variation_tier_2:
+    default: ""
+
+  variations:
+    from: variants
+    render: shopee_variations
+    if_exists: true
+
+  image_1:
+    from: image_urls[0]
+
+  image_2:
+    from: image_urls[1]
+    if_exists: true
+
+  image_3:
+    from: image_urls[2]
+    if_exists: true
+
+  image_4:
+    from: image_urls[3]
+    if_exists: true
+
+  image_5:
+    from: image_urls[4]
+    if_exists: true
+
+  image_6:
+    from: image_urls[5]
+    if_exists: true
+
+  image_7:
+    from: image_urls[6]
+    if_exists: true
+
+  image_8:
+    from: image_urls[7]
+    if_exists: true
+
+  image_9:
+    from: image_urls[8]
+    if_exists: true
+
+  weight:
+    from: weight_g
+    transforms:
+      - round: {decimals: 0}
+    default: 100
+
+  length:
+    from: dim_cm_l
+    transforms:
+      - round: {decimals: 0}
+    default: 10
+
+  width:
+    from: dim_cm_w
+    transforms:
+      - round: {decimals: 0}
+    default: 10
+
+  height:
+    from: dim_cm_h
+    transforms:
+      - round: {decimals: 0}
+    default: 10
+
+  brand:
+    from: brand
+    default: "No Brand"
+
+  condition:
+    from: condition
+    map_enum:
+      "new": "NEW"
+      "used": "USED"
+    default: "NEW"
+
+  logistics:
+    render: shopee_logistics_from_template
+    default: "Standard"
+
+  days_to_ship:
+    from: handling_time_days
+    default: 2
+
+policies:
+  required:
+    - category_id
+    - name
+    - description
+    - price
+    - stock
+    - image_1
+    - weight
+  images_max: 9

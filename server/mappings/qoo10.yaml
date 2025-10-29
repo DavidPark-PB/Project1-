@@ -1,0 +1,123 @@
+# Qoo10 Product Upload Mapping
+meta:
+  output_format: xlsx
+  sheet_name: ProductData
+  encoding: utf-8
+
+variant_mode: rows
+
+columns:
+  SellerCode:
+    from: sku
+
+  ItemTitle:
+    from: title
+    transforms:
+      - truncate: {max: 100}
+
+  Category:
+    lookup:
+      table: category_map_qoo10.csv
+      key: category_path
+      from: category_path
+      return: qoo10_category_code
+
+  Brand:
+    from: brand
+    default: "No Brand"
+
+  Price:
+    from: price
+    transforms:
+      - round: {decimals: 2}
+
+  Quantity:
+    from: quantity
+
+  Description:
+    from: description_html
+    transforms:
+      - sanitize_html
+      - limit_bytes: {max: 50000}
+
+  MainImage:
+    from: image_urls[0]
+
+  Image1:
+    from: image_urls[1]
+    if_exists: true
+
+  Image2:
+    from: image_urls[2]
+    if_exists: true
+
+  Image3:
+    from: image_urls[3]
+    if_exists: true
+
+  Image4:
+    from: image_urls[4]
+    if_exists: true
+
+  Image5:
+    from: image_urls[5]
+    if_exists: true
+
+  Image6:
+    from: image_urls[6]
+    if_exists: true
+
+  Image7:
+    from: image_urls[7]
+    if_exists: true
+
+  ModelNo:
+    from: model
+    default: ""
+
+  Barcode:
+    from: barcode
+    default: ""
+
+  Weight:
+    from: weight_g
+    transforms:
+      - round: {decimals: 0}
+    default: 100
+
+  Origin:
+    from: origin_country
+    default: "China"
+
+  Condition:
+    from: condition
+    map_enum:
+      "new": "New"
+      "used": "Used"
+      "refurbished": "Refurbished"
+    default: "New"
+
+  ShippingMethod:
+    default: "Standard"
+
+  ShippingFee:
+    default: "0"
+
+  HandlingTime:
+    from: handling_time_days
+    default: 2
+
+  Keywords:
+    from: item_specifics_json
+    render: tags_from_specifics
+    default: ""
+
+policies:
+  required:
+    - SellerCode
+    - ItemTitle
+    - Category
+    - Price
+    - Quantity
+    - MainImage
+  images_max: 8

@@ -1,0 +1,128 @@
+# Naver SmartStore Product Registration Mapping
+meta:
+  output_format: xlsx
+  sheet_name: 상품정보
+  encoding: utf-8
+
+variant_mode: rows
+
+columns:
+  상품번호:
+    from: sku
+
+  상품명:
+    from: title
+    transforms:
+      - truncate: {max: 100}
+
+  카테고리:
+    lookup:
+      table: category_map_naver.csv
+      key: category_path
+      from: category_path
+      return: naver_category_id
+
+  브랜드:
+    from: brand
+    default: "기타브랜드"
+
+  제조사:
+    from: brand
+    fallback: "제조사"
+
+  판매가:
+    from: price
+    transforms:
+      - currency_convert: {to: "KRW"}
+      - round: {decimals: 0}
+
+  재고수량:
+    from: quantity
+
+  상세설명:
+    from: description_html
+    transforms:
+      - sanitize_html
+
+  대표이미지:
+    from: image_urls[0]
+
+  추가이미지1:
+    from: image_urls[1]
+    if_exists: true
+
+  추가이미지2:
+    from: image_urls[2]
+    if_exists: true
+
+  추가이미지3:
+    from: image_urls[3]
+    if_exists: true
+
+  추가이미지4:
+    from: image_urls[4]
+    if_exists: true
+
+  추가이미지5:
+    from: image_urls[5]
+    if_exists: true
+
+  추가이미지6:
+    from: image_urls[6]
+    if_exists: true
+
+  추가이미지7:
+    from: image_urls[7]
+    if_exists: true
+
+  추가이미지8:
+    from: image_urls[8]
+    if_exists: true
+
+  추가이미지9:
+    from: image_urls[9]
+    if_exists: true
+
+  원산지:
+    from: origin_country
+    default: "중국"
+
+  상품상태:
+    from: condition
+    map_enum:
+      "new": "신상품"
+      "used": "중고"
+      "refurbished": "재생"
+    default: "신상품"
+
+  배송방법:
+    default: "택배배송"
+
+  배송비:
+    default: "무료"
+
+  검색태그:
+    from: item_specifics_json
+    render: tags_from_specifics
+    default: ""
+
+  판매자관리코드:
+    from: sku
+
+  바코드:
+    from: barcode
+    default: ""
+
+  모델명:
+    from: model
+    default: ""
+
+policies:
+  required:
+    - 상품번호
+    - 상품명
+    - 카테고리
+    - 판매가
+    - 재고수량
+    - 대표이미지
+  images_max: 10

@@ -1,0 +1,13 @@
+locale,size_id,max_weight_g,max_dimension_cm,name
+KR,0,500,30,Small Parcel
+KR,1,2000,60,Medium Parcel
+KR,2,5000,100,Large Parcel
+SG,0,500,30,Small Parcel
+SG,1,2000,60,Medium Parcel
+SG,2,5000,100,Large Parcel
+TH,0,500,30,Small Parcel
+TH,1,2000,60,Medium Parcel
+TH,2,5000,100,Large Parcel
+MY,0,500,30,Small Parcel
+MY,1,2000,60,Medium Parcel
+MY,2,5000,100,Large Parcel

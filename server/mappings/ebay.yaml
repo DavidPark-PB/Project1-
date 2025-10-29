@@ -1,0 +1,164 @@
+# eBay Product Listing Mapping
+meta:
+  output_format: csv
+  encoding: utf-8-sig
+
+variant_mode: rows
+
+columns:
+  Action:
+    default: "Add"
+
+  CustomLabel:
+    from: sku
+
+  Title:
+    from: title
+    transforms:
+      - truncate: {max: 80}
+
+  SubTitle:
+    from: title
+    transforms:
+      - truncate: {max: 55}
+    if_exists: true
+
+  Relationship:
+    default: ""
+
+  RelationshipDetails:
+    default: ""
+
+  Category:
+    lookup:
+      table: category_map_ebay.csv
+      key: category_path
+      from: category_path
+      return: ebay_category_id
+
+  StoreCategory:
+    default: ""
+
+  Condition:
+    from: condition
+    map_enum:
+      "new": "1000"
+      "used": "3000"
+      "refurbished": "2000"
+    default: "1000"
+
+  ConditionDescription:
+    from: description_html
+    transforms:
+      - strip_disallowed_tags
+      - truncate: {max: 1000}
+
+  Description:
+    from: description_html
+    transforms:
+      - sanitize_html
+      - limit_bytes: {max: 500000}
+
+  Format:
+    default: "FixedPrice"
+
+  Duration:
+    default: "GTC"
+
+  StartPrice:
+    from: price
+    transforms:
+      - currency_convert: {to: "USD"}
+      - round: {decimals: 2}
+
+  Quantity:
+    from: quantity
+
+  PicURL:
+    from: image_urls[0]
+
+  PictureURL1:
+    from: image_urls[0]
+
+  PictureURL2:
+    from: image_urls[1]
+    if_exists: true
+
+  PictureURL3:
+    from: image_urls[2]
+    if_exists: true
+
+  PictureURL4:
+    from: image_urls[3]
+    if_exists: true
+
+  PictureURL5:
+    from: image_urls[4]
+    if_exists: true
+
+  PictureURL6:
+    from: image_urls[5]
+    if_exists: true
+
+  PictureURL7:
+    from: image_urls[6]
+    if_exists: true
+
+  PictureURL8:
+    from: image_urls[7]
+    if_exists: true
+
+  PictureURL9:
+    from: image_urls[8]
+    if_exists: true
+
+  PictureURL10:
+    from: image_urls[9]
+    if_exists: true
+
+  PictureURL11:
+    from: image_urls[10]
+    if_exists: true
+
+  PictureURL12:
+    from: image_urls[11]
+    if_exists: true
+
+  Brand:
+    from: brand
+    if_exists: true
+
+  MPN:
+    from: mpn
+    if_exists: true
+
+  UPC:
+    from: barcode
+    if_exists: true
+
+  ShippingProfileName:
+    from: shipping_template
+    default: "Standard"
+
+  HandlingTime:
+    from: handling_time_days
+    default: 3
+
+  Location:
+    from: origin_country
+    default: "US"
+
+  ProductWeight:
+    from: weight_g
+    transforms:
+      - round: {decimals: 2}
+    if_exists: true
+
+policies:
+  required:
+    - Title
+    - Category
+    - StartPrice
+    - Quantity
+    - PicURL
+  images_max: 12
