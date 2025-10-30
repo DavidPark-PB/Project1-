@@ -27,6 +27,7 @@ wheels/
 out/
 temp/
 logs/
+*.log
 *.xlsx
 *.csv
 *.xls
